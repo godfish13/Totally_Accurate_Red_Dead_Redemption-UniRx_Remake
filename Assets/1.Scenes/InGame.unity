@@ -130,10 +130,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 568857082}
     m_Modifications:
-    - target: {fileID: 2654751371799056997, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
-      propertyPath: Index
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 2654751371799057000, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -330,7 +326,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &151396667
 RectTransform:
   m_ObjectHideFlags: 0
@@ -982,10 +978,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 568857082}
     m_Modifications:
-    - target: {fileID: 2654751371799056997, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
-      propertyPath: Index
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 2654751371799057000, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1048,10 +1040,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 568857082}
     m_Modifications:
-    - target: {fileID: 2654751371799056997, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
-      propertyPath: Index
-      value: 11
-      objectReference: {fileID: 0}
     - target: {fileID: 2654751371799057000, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -3023,10 +3011,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 568857082}
     m_Modifications:
-    - target: {fileID: 2654751371799056997, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
-      propertyPath: Index
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 2654751371799057000, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -3337,10 +3321,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 568857082}
     m_Modifications:
-    - target: {fileID: 2654751371799056997, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
-      propertyPath: Index
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 2654751371799057000, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -3828,6 +3808,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1441331985}
   m_CullTransparentMesh: 1
+--- !u!4 &1452735179 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2654751373073167897, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
+  m_PrefabInstance: {fileID: 2654751372078450620}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1527753701
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4178,6 +4163,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1671887120}
   m_CullTransparentMesh: 1
+--- !u!198 &1712821126 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2767740940349665721, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
+  m_PrefabInstance: {fileID: 2654751372078450620}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1794029603
 GameObject:
   m_ObjectHideFlags: 0
@@ -4940,7 +4930,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b82d47ad2738a84409ab02abf0881cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireCtrl: {fileID: 0}
   maxPool: 20
   HittedEffect: {fileID: 1000012909287652, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
   BloodPool: []
@@ -4971,7 +4960,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 530a101010c49e94681ef5902e9bf222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyFire: {fileID: 0}
   maxPool: 20
   E_Bullet: {fileID: 836002080939217486, guid: 3b64ca7a46809cb49a04757f8229736f, type: 3}
   BulletPool: []
@@ -6379,6 +6367,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 568857082}
     m_Modifications:
+    - target: {fileID: -7973913498081464668, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
+      propertyPath: EnemyfirePostr
+      value: 
+      objectReference: {fileID: 1452735179}
+    - target: {fileID: -7973913498081464668, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
+      propertyPath: EnemyMuzzleFlash
+      value: 
+      objectReference: {fileID: 1712821126}
     - target: {fileID: 2654751371799057000, guid: 0392728f3a55af742a73cec68c5ded9e, type: 3}
       propertyPath: m_RootOrder
       value: 0

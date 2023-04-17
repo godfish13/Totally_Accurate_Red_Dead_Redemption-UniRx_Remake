@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BulletPoolingEnemy : MonoBehaviour
 {
-    public EnemyFire enemyFire;
-
     public int maxPool = 20;
     public GameObject E_Bullet;
     public List<GameObject> BulletPool = new List<GameObject>();
@@ -15,14 +13,9 @@ public class BulletPoolingEnemy : MonoBehaviour
         CreateBulletPooling();
     }
 
-    private void Start()
-    {
-        enemyFire = GameObject.FindGameObjectWithTag("ENEMY").GetComponent<EnemyFire>();
-    }
-
     public void CreateBulletPooling()
     {
-        GameObject EnemyBulletPool = new GameObject("EnemyBulletPool"); // 출혈 이펙트 차일드화 해놓을 부모 오브젝트 생성
+        GameObject EnemyBulletPool = new GameObject("EnemyBulletPool"); // 총알 차일드화 해놓을 부모 오브젝트 생성
         for (int i = 0; i < maxPool; i++)
         {
             var obj = Instantiate<GameObject>(E_Bullet, EnemyBulletPool.transform);

@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using UniRx.Triggers;
+using System;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI_UniRx : MonoBehaviour
 {
     public enum State
     {
@@ -17,7 +20,7 @@ public class EnemyAI : MonoBehaviour
 
     private Transform Playertr;
 
-    public int HP = 10;
+    [SerializeField] IntReactiveProperty HP = new IntReactiveProperty(10);
     public float AttackDist = 5.0f;
     public float TraceDist = 10.0f;
     public float distBetweenEnemyPlayer;
@@ -27,22 +30,21 @@ public class EnemyAI : MonoBehaviour
 
     private WaitForSeconds ws;
 
-    private EnemyMove enemyMove;
-    private EnemyFire enemyFire;
+    private EnemyMove_UniRx enemyMove;
+    private EnemyFire_UniRx enemyFire;
     private PlayerStatus playerStatus;
 
     private Animator EnemyModelanimator;
     private readonly int hashMove = Animator.StringToHash("isMove");
     private readonly int hashDead = Animator.StringToHash("isDead");
-
     private void Awake()
     {
-        enemyMove = GetComponent<EnemyMove>();
-        enemyFire = GetComponent<EnemyFire>();
+        enemyMove = GetComponent<EnemyMove_UniRx>();
+        enemyFire = GetComponent<EnemyFire_UniRx>();
         EnemyModelanimator = GetComponentInChildren<Animator>();
 
         var player = GameObject.FindGameObjectWithTag("PLAYER");
-        if(player != null)
+        if (player != null)
         {
             Playertr = player.GetComponent<Transform>();
         }
@@ -57,21 +59,26 @@ public class EnemyAI : MonoBehaviour
         StartCoroutine(CheckState());
         StartCoroutine(Action());
     }
-
-    private void Update()
+    private void Start()
     {
-        if(HP <= 0)
-        {
-            playerStatus.SendMessage("KillPlus");
-            enemyFire.enabled = false;
-            isDead = true;
-            enemyFire.isFire = false;
-            EnemyModelanimator.SetBool(hashDead, true);
-            enemyMove.Stop();
-            GetComponent<EnemyAI>().enabled = false;
-            GetComponent<CapsuleCollider>().enabled = false;
-            GetComponent<EnemyMove>().enabled = false;
-        }
+        StartCoroutine(CheckState());
+        StartCoroutine(Action());
+
+        HP.AsObservable()
+            .Where(HP => (HP <= 0))     // 사망상태면
+            .First()        // where 필터를 통과하여 값이 오면(사망했으면) OnNext 후 OnCompleted 발행
+            .Subscribe(_ =>
+            {
+                playerStatus.SendMessage("KillPlus");
+                enemyFire.enabled = false;
+                isDead = true;
+                enemyFire.isFire = false;
+                EnemyModelanimator.SetBool(hashDead, true);
+                enemyMove.Stop();
+                GetComponent<CapsuleCollider>().enabled = false;
+                GetComponent<EnemyMove_UniRx>().enabled = false;
+                Destroy(GetComponent<EnemyAI_UniRx>());
+            }, () => Debug.Log("OnCompleted HP stream"));
     }
 
     IEnumerator CheckState()        // Enemy 현 상태 변환
@@ -85,11 +92,11 @@ public class EnemyAI : MonoBehaviour
 
             distBetweenEnemyPlayer = Vector3.Distance(Playertr.position, transform.position);
 
-            if(distBetweenEnemyPlayer <= AttackDist)
+            if (distBetweenEnemyPlayer <= AttackDist)
             {
                 state = State.Attack;
             }
-            else if(distBetweenEnemyPlayer <= TraceDist)
+            else if (distBetweenEnemyPlayer <= TraceDist)
             {
                 state = State.Trace;
             }
@@ -104,7 +111,7 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator Action()
     {
-        while(!isDead)
+        while (!isDead)
         {
             yield return ws;
             switch (state)
@@ -121,16 +128,16 @@ public class EnemyAI : MonoBehaviour
                     break;
                 case State.Attack:
                     enemyMove.Stop();
-                    if(enemyFire.isFire == false)
+                    if (enemyFire.isFire == false)
                         enemyFire.isFire = true;
                     EnemyModelanimator.SetBool(hashMove, false);
                     break;
             }
-        }            
+        }
     }
 
     public void Hitted()
     {
-        HP--;
+        HP.Value--;
     }
 }

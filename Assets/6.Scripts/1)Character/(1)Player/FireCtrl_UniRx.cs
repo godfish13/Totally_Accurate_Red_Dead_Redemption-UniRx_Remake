@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UniRx.Triggers;
 using UnityEngine;
 using UniRx;
+using System;
 
 public class FireCtrl_UniRx : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class FireCtrl_UniRx : MonoBehaviour
     void Start()
     {
         this.UpdateAsObservable()
+            .Select(_ => Input.GetMouseButtonDown(0))       
+            .Where(MouseDown => MouseDown)                  // 조준중일 시
             .Subscribe(input => Fire());
     }
 
@@ -23,21 +26,18 @@ public class FireCtrl_UniRx : MonoBehaviour
     {
         if (Input.GetMouseButton(1))
         {
-            if (Input.GetMouseButtonDown(0))
+            BulletShot();
+            gunEffectCtrl.SendMessage("Fire");  //발포음 재생 명령
+            if (Physics.Raycast(firePostr.position, firePostr.forward, out hitInfo, fireRange))
             {
-                BulletShot();
-                gunEffectCtrl.SendMessage("Fire");  //발포음 재생 명령
-                if (Physics.Raycast(firePostr.position, firePostr.forward, out hitInfo, fireRange))
+                if (hitInfo.collider.CompareTag("ENEMY"))
                 {
-                    if (hitInfo.collider.CompareTag("ENEMY"))
-                    {
-                        Debug.Log("Hitted Enemy!!");
-                        hitInfo.collider.SendMessage("Hitted");
-                        HittedBlood();  // 적 피격위치에 혈흔 이펙트 풀링해서 재생
-                    }
+                    Debug.Log("Hitted Enemy!!");
+                    hitInfo.collider.SendMessage("Hitted");     // Subject로 Hitted정보를 발행하여 각자 구독 후 자신이 해당되는지 판단하는 것보다 SendMessage가 더 간결하다고 판단
+                    HittedBlood();  // 적 피격위치에 혈흔 이펙트 풀링해서 재생
                 }
-                Debug.DrawRay(firePostr.position, firePostr.forward * fireRange, Color.blue, 1.0f);
             }
+            Debug.DrawRay(firePostr.position, firePostr.forward * fireRange, Color.blue, 1.0f);
         }
     }
 

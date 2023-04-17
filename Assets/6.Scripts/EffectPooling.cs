@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EffectPooling : MonoBehaviour
 {
-    public FireCtrl fireCtrl;
-
     public int maxPool = 20;
     public GameObject HittedEffect;
     public List<GameObject> BloodPool = new List<GameObject>();
@@ -13,11 +11,6 @@ public class EffectPooling : MonoBehaviour
     private void Awake()        // 오브젝트 풀 스크립트 재생 이전에 미리 만들어두게 Awake()에서 진행
     {
         CreateBloodPooling();
-    }
-
-    private void Start()
-    {
-        fireCtrl = GameObject.FindGameObjectWithTag("PLAYER").GetComponent<FireCtrl>();
     }
 
     public void CreateBloodPooling()

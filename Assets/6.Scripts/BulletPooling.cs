@@ -15,7 +15,7 @@ public class BulletPooling : MonoBehaviour
 
     public void CreateBulletPooling()
     {
-        GameObject BulletPools = new GameObject("BulletPools"); // 출혈 이펙트 차일드화 해놓을 부모 오브젝트 생성
+        GameObject BulletPools = new GameObject("BulletPools"); // 총알 차일드화 해놓을 부모 오브젝트 생성
         for (int i = 0; i < maxPool; i++)
         {
             var obj = Instantiate<GameObject>(Bullet, BulletPools.transform);
