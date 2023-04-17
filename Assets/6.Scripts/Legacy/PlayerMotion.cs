@@ -10,14 +10,12 @@ public class PlayerMotion : MonoBehaviour
     private readonly int isMove = Animator.StringToHash("isMove");
     private readonly int isShooting = Animator.StringToHash("isShooting");
 
-    // Start is called before the first frame update
     void Start()
     {
         playerCtrl = GameObject.FindGameObjectWithTag("PLAYER").GetComponent<PlayerCtrl>();
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (playerCtrl.h != 0 || playerCtrl.v != 0)
