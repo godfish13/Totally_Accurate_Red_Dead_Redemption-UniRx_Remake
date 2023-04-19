@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.AI;
 using UniRx;
 using UniRx.Triggers;
+using System;
 
 public class EnemyMove_UniRx : MonoBehaviour
 {
+    [SerializeField] private EnemyAI_UniRx _EnemyAI_UniRx;
     public List<Transform> wayPoints;
     public int Index = 0;
 
@@ -15,9 +17,7 @@ public class EnemyMove_UniRx : MonoBehaviour
     private readonly float patrolSpeed = 6.0f;
     private readonly float traceSpeed = 30.0f;
 
-    public bool tad { get; set; }
     public bool isPatrolling;  //순찰 여부 판단
-
     public bool patrolling      // getter setter로 patrol과 trace 활성/비활성화
     {
         get
@@ -34,7 +34,6 @@ public class EnemyMove_UniRx : MonoBehaviour
             }
         }
     }
-
 
     private Vector3 Target;
     public Vector3 traceTarget
@@ -64,18 +63,27 @@ public class EnemyMove_UniRx : MonoBehaviour
         agent.speed = patrolSpeed;
         agent.autoBraking = false;
 
-        this.UpdateAsObservable()
-            .Subscribe(_ =>
+        IDisposable UpdateStream = Observable.EveryUpdate().Subscribe(_ => Move());
+        //사망시 Update스트림 dispose할 수 있게 IDisposable로 선언
+        _EnemyAI_UniRx.isDeadObservable
+            .Where(OnNextValue => OnNextValue == true)
+            .First()
+            .Subscribe(_ => 
             {
-                if(!isPatrolling) return;
+                this.enabled = false;
+                UpdateStream.Dispose();
+            }, () => Debug.Log("EnemyMove stream OnCompleted"));
+    }
 
-                // agent가 이동중이고 목적지 도착했으면 다음 목적지 계산 및 이동 재개
-                if (agent.velocity.sqrMagnitude >= 0.2f * 0.2f && agent.remainingDistance <= 0.5f)
-                {                                           // Magnitude는 제곱근연산을 실행하므로 느림 // 이미 제곱근값을 가지는 sqrMagnitude 사용
-                    Index = Random.Range(0, wayPoints.Count);
-                    MoveWayPoint();                         // (Magnitude > 0.2f) == (sqrMagnitude > 0.2f * 0.2f)
-                }
-            });
+    void Move()
+    {
+        if (!isPatrolling) return;
+        // agent가 이동중이고 목적지 도착했으면 다음 목적지 계산 및 이동 재개
+        if (agent.velocity.sqrMagnitude >= 0.2f * 0.2f && agent.remainingDistance <= 0.5f)
+        {                                           // Magnitude는 제곱근연산을 실행하므로 느림 // 이미 제곱근값을 가지는 sqrMagnitude 사용
+            Index = UnityEngine.Random.Range(0, wayPoints.Count);
+            MoveWayPoint();                         // (Magnitude > 0.2f) == (sqrMagnitude > 0.2f * 0.2f)
+        }
     }
 
     void MoveWayPoint()

@@ -200,7 +200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0375da6214f47d642868f7be611d6c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  a: {fileID: 9054520790656925994}
   state: 1
   HP:
     value: 5
@@ -208,7 +207,9 @@ MonoBehaviour:
   TraceDist: 60
   distBetweenEnemyPlayer: 0
   isMove: 1
-  isDead: 0
+  isFire: 0
+  isDead:
+    value: 0
 --- !u!114 &-2266842386789147586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,6 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bed7c05e2af59c44a85a86334aa72f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _EnemyAI_UniRx: {fileID: -812750892748402091}
   wayPoints: []
   Index: 0
   isPatrolling: 0
@@ -238,8 +240,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 2654751371799056992}
   Playertr: {fileID: 0}
+  _EnemyAI_UniRx: {fileID: -812750892748402091}
+  effectPooling: {fileID: 0}
+  bulletPoolingEnemy: {fileID: 0}
   fireRange: 40
-  isFire: 0
   EnemyGunFireSound: {fileID: 8300000, guid: 165f70b4d392b4536b355cf849b6d70f, type: 3}
   EnemyfirePostr: {fileID: 2654751373073167897}
   EnemyMuzzleFlash: {fileID: 2767740940349665721}

@@ -1,44 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using System;
 
 public class EnemyFire_UniRx : MonoBehaviour
 {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private Transform Playertr;
+    [SerializeField] private EnemyAI_UniRx _EnemyAI_UniRx;
+    [SerializeField] private EffectPooling effectPooling;
+    [SerializeField] private BulletPoolingEnemy bulletPoolingEnemy;
 
     private float nextFire = 0.0f;
     private readonly float FireCoolDown = 0.3f;
     private readonly float damping = 10.0f;
     public float fireRange = 40.0f;
 
-    public bool isFire = false;
     public AudioClip EnemyGunFireSound;
 
     public Transform EnemyfirePostr;
     public ParticleSystem EnemyMuzzleFlash;
     public RaycastHit hitInfo;
-    private EffectPooling effectPooling;
-    private BulletPoolingEnemy bulletPoolingEnemy;
 
     void Start()
     {
         Playertr = GameObject.FindGameObjectWithTag("PLAYER").GetComponent<Transform>();
         effectPooling = GameObject.FindGameObjectWithTag("POOLINGMAKER").GetComponent<EffectPooling>();
         bulletPoolingEnemy = GameObject.FindGameObjectWithTag("POOLINGMAKER").GetComponent<BulletPoolingEnemy>();
+
+        IDisposable UpdateStream = Observable.EveryUpdate().Subscribe(_ => FireChecker(), () => Debug.Log("Firing Oncompleted"));
+        //사망시 Update스트림 dispose할 수 있게 IDisposable로 선언
+        _EnemyAI_UniRx.isDeadObservable
+           .Where(OnNextValue => OnNextValue == true)
+           .First()
+           .Subscribe(_ =>
+           {
+               this.enabled = false;
+               UpdateStream.Dispose();
+           }, () => Debug.Log("isDead Oncompleted"));
     }
 
-    // Update is called once per frame
-    void Update()
+    void FireChecker()  // 발포중인지 아닌지 판별
     {
-        if (isFire)
+        if (_EnemyAI_UniRx.isFire)
         {
             RotateWhileFiring();
             nextFire += 0.1f * Time.deltaTime;
             if (nextFire >= FireCoolDown)
             {
                 E_Fire();
-                nextFire = Random.Range(0.0f, 0.1f);
+                nextFire = UnityEngine.Random.Range(0.0f, 0.1f);
             }
         }
         else
@@ -47,7 +59,7 @@ public class EnemyFire_UniRx : MonoBehaviour
         }
     }
 
-    void E_Fire()
+    void E_Fire() // 발포
     {
         EnemyMuzzleFlash.Play();
         BulletShot();
