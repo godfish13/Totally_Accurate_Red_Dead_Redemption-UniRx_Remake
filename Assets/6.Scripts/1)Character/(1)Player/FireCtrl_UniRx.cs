@@ -19,6 +19,7 @@ public class FireCtrl_UniRx : MonoBehaviour
         this.UpdateAsObservable()
             .Select(_ => Input.GetMouseButtonDown(0))       
             .Where(MouseDown => MouseDown)                  // 조준중일 시
+            .ThrottleFirst(TimeSpan.FromSeconds(0.5f))      // 총 난사 못하게 연타해도 발포후 0.5초동안 무시
             .Subscribe(input => Fire());
     }
 

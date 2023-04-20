@@ -29,7 +29,7 @@ public class EnemyFire_UniRx : MonoBehaviour
         effectPooling = GameObject.FindGameObjectWithTag("POOLINGMAKER").GetComponent<EffectPooling>();
         bulletPoolingEnemy = GameObject.FindGameObjectWithTag("POOLINGMAKER").GetComponent<BulletPoolingEnemy>();
 
-        IDisposable UpdateStream = Observable.EveryUpdate().Subscribe(_ => FireChecker(), () => Debug.Log("Firing Oncompleted"));
+        IDisposable UpdateStream = Observable.EveryUpdate().Subscribe(_ => FireChecker());
         //사망시 Update스트림 dispose할 수 있게 IDisposable로 선언
         _EnemyAI_UniRx.isDeadObservable
            .Where(OnNextValue => OnNextValue == true)
@@ -38,7 +38,10 @@ public class EnemyFire_UniRx : MonoBehaviour
            {
                this.enabled = false;
                UpdateStream.Dispose();
-           }, () => Debug.Log("isDead Oncompleted"));
+           }, () => Debug.Log("EnemyFire Stream Oncompleted"));
+        // AddTo(this) 후 사망 시 자기 스크립트를 destroy하도록 UpdateStream관리를 시도했으나 destroy이후 Subscribe를 한번 더 실행하고
+        // RotateWhileFiring에서 transform.position을 탐색하나 이미 destroy된 후이므로
+        // null reference오류가 발생, 이후 dispose되는 것을 확인 // 해당 오류를 피하기 위해 IDisposable로 구현
     }
 
     void FireChecker()  // 발포중인지 아닌지 판별
