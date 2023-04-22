@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System;
 
 public class FadeMgr_UniRx : MonoBehaviour
 {
@@ -38,7 +36,7 @@ public class FadeMgr_UniRx : MonoBehaviour
         Dark.enabled = false;
     }
 
-    IEnumerator FadeOut()   //페이드 아웃 후 InGame scene 로딩
+    public IEnumerator FadeOut()   //페이드 아웃 후 InGame scene 로딩
     {
         Dark.enabled = true;
         while (AlphaValue <= 1)
@@ -47,7 +45,6 @@ public class FadeMgr_UniRx : MonoBehaviour
             AlphaValue += 0.01f;
             yield return ws;
         }
-        SceneManager.LoadScene("InGame");
         Cursor.visible = false;
     }
 }

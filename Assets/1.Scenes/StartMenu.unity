@@ -1806,6 +1806,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Startbtn: {fileID: 1122536080}
   Quitbtn: {fileID: 536847643}
+  _FadeMgr_UniRx: {fileID: 1546963871}
 --- !u!1 &572350704
 GameObject:
   m_ObjectHideFlags: 0
