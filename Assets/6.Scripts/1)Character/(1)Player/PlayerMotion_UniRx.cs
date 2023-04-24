@@ -14,7 +14,8 @@ public class PlayerMotion_UniRx : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        this.UpdateAsObservable().Select(_ => new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")))
+        this.UpdateAsObservable()
+            .Select(_ => new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")))
             .Subscribe(input =>
             {
                 if (input.z != 0 || input.x != 0)

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 
 public class GunEffectCtrl : MonoBehaviour
@@ -10,7 +12,6 @@ public class GunEffectCtrl : MonoBehaviour
 
     public ParticleSystem MuzzleFlash;
 
-    // Start is called before the first frame update
     void Start()
     {
         AudioSource = gameObject.GetComponent<AudioSource>();

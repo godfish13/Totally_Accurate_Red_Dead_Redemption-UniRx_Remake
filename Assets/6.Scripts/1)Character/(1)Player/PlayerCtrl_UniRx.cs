@@ -21,7 +21,7 @@ public class PlayerCtrl_UniRx : MonoBehaviour
             {
                 if(Input.GetMouseButton(1)) rotateCharacterWhileAiming();   // 조준 상태 회전             
                 else rotateCharacter();                                     // 비조준 상태 회전
-            });         // 캐릭터 회전           // where 오퍼레이터 사용보다 if문이 더 간결한 상황이므로 if문 사용
+            });         // 캐릭터 회전           // 마우스 우클릭 where 오퍼레이터 사용보다 if문이 더 간결한 상황이므로 if문 사용
     }
 
     void Move(Vector3 input)

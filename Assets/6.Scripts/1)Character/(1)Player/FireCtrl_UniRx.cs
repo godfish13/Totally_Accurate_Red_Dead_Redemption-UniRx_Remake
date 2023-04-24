@@ -17,29 +17,28 @@ public class FireCtrl_UniRx : MonoBehaviour
     void Start()
     {
         this.UpdateAsObservable()
-            .Select(_ => Input.GetMouseButtonDown(0))       
-            .Where(MouseDown => MouseDown)                  // 조준중일 시
+            .Select(_ => Input.GetMouseButton(1))       // 우클릭유지
+            .Where(Aiming => Aiming)                    // 우클릭유지중(조준모드)
+            .Select(Aiming => Input.GetMouseButtonDown(0))  // 좌클릭으로 인풋값 변경
+            .Where(shooting => shooting)                  // 좌클릭을 하면
             .ThrottleFirst(TimeSpan.FromSeconds(0.5f))      // 총 난사 못하게 연타해도 발포후 0.5초동안 무시
             .Subscribe(input => Fire());
     }
 
     void Fire()
-    {
-        if (Input.GetMouseButton(1))
+    {       
+        BulletShot();
+        gunEffectCtrl.SendMessage("Fire");  //발포음 재생 명령
+        if (Physics.Raycast(firePostr.position, firePostr.forward, out hitInfo, fireRange))
         {
-            BulletShot();
-            gunEffectCtrl.SendMessage("Fire");  //발포음 재생 명령
-            if (Physics.Raycast(firePostr.position, firePostr.forward, out hitInfo, fireRange))
+            if (hitInfo.collider.CompareTag("ENEMY"))
             {
-                if (hitInfo.collider.CompareTag("ENEMY"))
-                {
-                    Debug.Log("Hitted Enemy!!");
-                    hitInfo.collider.SendMessage("Hitted");     // Subject로 Hitted정보를 발행하여 각자 구독 후 자신이 해당되는지 판단하는 것보다 SendMessage가 더 간결하다고 판단
-                    HittedBlood();  // 적 피격위치에 혈흔 이펙트 풀링해서 재생
-                }
+                Debug.Log("Hitted Enemy!!");
+                hitInfo.collider.SendMessage("Hitted");     // Subject로 Hitted정보를 발행하여 각자 구독 후 자신이 해당되는지 판단하는 것보다 SendMessage가 더 간결하다고 판단
+                HittedBlood();  // 적 피격위치에 혈흔 이펙트 풀링해서 재생
             }
-            Debug.DrawRay(firePostr.position, firePostr.forward * fireRange, Color.blue, 1.0f);
         }
+        Debug.DrawRay(firePostr.position, firePostr.forward * fireRange, Color.blue, 1.0f);       
     }
 
     void HittedBlood()
