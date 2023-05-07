@@ -20,7 +20,6 @@ public class FadeMgr_UniRx : MonoBehaviour
     {
         buttonCtrl.StartbtnClickedObservable.Subscribe(message =>   // Startbtn 클릭 이벤트 구독, 발행된 메시지 로그에 띄움 + 페이드아웃 시작
         {
-            Debug.Log(message);
             StartCoroutine(FadeOut());
         });
     }

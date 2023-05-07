@@ -27,6 +27,7 @@ public class ViewClues : MonoBehaviour
             .Subscribe(_ => CluePanelControl());
 
         playerStatus.KillScoreObservable
+            .Where(KillScore => KillScore == 2)
             .Subscribe(x =>
             {
                 if (x < 2)

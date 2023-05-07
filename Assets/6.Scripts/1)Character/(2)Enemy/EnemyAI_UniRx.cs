@@ -29,9 +29,9 @@ public class EnemyAI_UniRx : MonoBehaviour
     [SerializeField] private float TraceDist = 10.0f;
     [SerializeField] private float distBetweenEnemyPlayer;
     [SerializeField] IntReactiveProperty HP = new IntReactiveProperty(10);
-    [SerializeField] private BoolReactiveProperty isDead = new BoolReactiveProperty(false);
+    [SerializeField] private BoolReactiveProperty isDead = new BoolReactiveProperty(false); // 직관성을 위해 HP < 0의 조건을 따르는 isDead 따로 배치
     public IObservable<bool> isDeadObservable => isDead;        // isDead의 변경신호를 감지하여 스크립트들이 자신을 비활성화시키도록 observer패턴 구현
-
+                                                                // observer : EnemyFire_UniRx, EnemyMove_UniRx class
     public bool isFire { get; set; }    // private + 프로퍼티이면 serializefield해도 inspecter에 노출 안됨
 
     private WaitForSeconds ws = new WaitForSeconds(0.3f);
